@@ -38,15 +38,22 @@
         $lang=ru;
         $url ="http://api.openweathermap.org/data/2.5/forecast/daily?q=$city,$con&mode=$mode&APPID=$appid&units=$units&cnt=$cnt&lang=$lang";
         // echo "$url";
-        $date = date('Y-m-d');
+        $date = "'".date('Y-m-d')."'";
+
+        for($i=-1;$i>=-6;$i--){
+            $date .= ','."'".date("Y-m-d", strtotime("$i days"))."'";
+        }
         //сохраняем данные в бд
-        $find = mysqli_query($dim,"SELECT `text` FROM `queries` WHERE `city`='$city' AND `date` ='$date' AND `country` = '$con'");
+        $query = "SELECT `text` FROM `queries` WHERE `city`='$city' AND `date`IN($date) AND `country` = '$con' ORDER BY id DESC";
+        $find = mysqli_query($dim,$query);
+        pre($query);
         echo "<div class='day city'>";
         if($in = mysqli_fetch_assoc($find)){
             echo "<p>данные получены из бд</p>";
             $data = $in[text];
            
         } else{
+            $date = date('Y-m-d');
             echo "<p>данные получены из api</p>";
             $data = @file_get_contents ($url);
             $in = mysqli_real_escape_string($dim,$data);
