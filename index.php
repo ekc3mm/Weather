@@ -99,7 +99,6 @@
    
     
     </div>
-    <script src="js/map.js"></script>
 
 
 </body>
