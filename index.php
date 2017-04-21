@@ -46,7 +46,7 @@
         //сохраняем данные в бд
         $query = "SELECT `text` FROM `queries` WHERE `city`='$city' AND `date`IN($date) AND `country` = '$con' ORDER BY id DESC";
         $find = mysqli_query($dim,$query);
-        pre($query);
+    
         echo "<div class='day city'>";
         if($in = mysqli_fetch_assoc($find)){
             echo "<p>данные получены из бд</p>";
