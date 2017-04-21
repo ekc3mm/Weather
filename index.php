@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
-    <link href="include/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
 </head>
 <body>
@@ -21,7 +21,9 @@
     <?php
     require_once('include/connect.php');
     require_once('include/func.php');
-        if($_GET){
+    if($_GET){
+        if($_GET[city] !=''){
+
 
         $city = mysqli_real_escape_string($dim,$_GET[city]);
         // $city = translit($cityor);
@@ -55,7 +57,7 @@
         } else{
             $date = date('Y-m-d');
             echo "<p>данные получены из api</p>";
-            $data = @file_get_contents ($url);
+            $data = file_get_contents ($url);
             $in = mysqli_real_escape_string($dim,$data);
             mysqli_query($dim,"INSERT INTO `queries`(`text`,`date`,`city`,`country`) VALUES ('$in','$date','$city','$con')");
         }
@@ -83,16 +85,22 @@
             echo '</div>';
         }
 
+        include ('include/map.php');
+        
+        echo "<a href='#main'> <button href='#main' class='btn'>Вверх</button></a>";
 
-            include('include/map.php');
-
-            // pre($data);
-    echo "<a href='#main'> <button href='#main' class='btn'>Вверх</button></a>";
-
+    } else{
+        echo "<div class='day city'>";
+        echo "Вы не ввели город";
+        echo "</div>";
     }
+}
     ?>
    
     
     </div>
+    <script src="js/map.js"></script>
+
+
 </body>
 </html>
